@@ -27,6 +27,7 @@ public class BookServiceImplementation implements BookService {
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
 
+
     @Override
     public String registerBook(BookRegistrationDto dto) throws BookStoreException {
         if(bookRepository.existsByTitleIsIgnoreCase(dto.getTitle())) throw new BookStoreException("Book already exist");
@@ -43,54 +44,44 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public PaginatedBookResponse findBooksByAuthor(int pageNumber, int limit, String author) throws BookStoreException {
-        if(!bookRepository.existsByAuthorIsIgnoreCase(author)) throw new BookStoreException("Book not found");
-
+    public PaginatedBookResponse findBooksByAuthor(int pageNumber, int limit, String author) {
         PaginatedBookResponse response = new PaginatedBookResponse();
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(pageNumber - 1, limit, Sort.by(order));
         List<BookDto> books = new ArrayList<>();
         Page<Book> bookPage = bookRepository.findBooksByAuthorIsIgnoreCase(author, pageable);
-        for (Book book : bookPage) {
-            BookDto bookDto = new BookDto();
-            bookDto.setBook(book);
-            //todo  link to the order of books when done
-            //todo implement login when security is done
-            bookDto.setNumberOfOrders(0);
-            bookDto.setNumberOfBooks(0);
-            books.add(bookDto);
-        }
-        response.setBooks(books);
-        response.setCurrentPage(pageNumber);
+        setBookDetails(pageNumber, response, books, bookPage);
         response.setNumberOfBooks(bookRepository.countAllBooksByAuthorIsIgnoreCase(author));
         response.setNoOfTotalPages(bookRepository.countAllBooksByAuthorIsIgnoreCase(author) / limit);
         return response;
     }
 
     @Override
-    public PaginatedBookResponse findBooksByCategory(int pageNumber, int limit, String category) throws BookStoreException {
-        if(!bookRepository.existsByCategory(Category.valueOf(category))) throw new BookStoreException("Book not found");
-
+    public PaginatedBookResponse findBooksByCategory(int pageNumber, int limit, String category) {
         PaginatedBookResponse response = new PaginatedBookResponse();
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createdDate");
         Pageable pageable = PageRequest.of(pageNumber - 1, limit, Sort.by(order));
         List<BookDto> books = new ArrayList<>();
         Page<Book> bookPage = bookRepository.findBooksByCategory(Category.valueOf(category), pageable);
         // todo refactoring
+        setBookDetails(pageNumber, response, books, bookPage);
+        response.setNumberOfBooks(bookRepository.countAllBooksByCategory(Category.valueOf(category)));
+        response.setNoOfTotalPages(bookRepository.countAllBooksByCategory(Category.valueOf(category)) / limit);
+        return response;
+    }
+
+    private void setBookDetails(int pageNumber, PaginatedBookResponse response, List<BookDto> books, Page<Book> bookPage) {
         for (Book book : bookPage) {
             BookDto bookDto = new BookDto();
             bookDto.setBook(book);
             //todo  link to the order of books when done
             //todo implement login when security is done
             bookDto.setNumberOfOrders(0);
-            bookDto.setNumberOfBooks(0);
+            bookDto.setNumberOfBooks(book.getQuantityOfBooksAvailable());
             books.add(bookDto);
         }
-        response.setBooks(books);
+        response.setBookDtos(books);
         response.setCurrentPage(pageNumber);
-        response.setNumberOfBooks(bookRepository.countAllBooksByCategory(Category.valueOf(category)));
-        response.setNoOfTotalPages(bookRepository.countAllBooksByCategory(Category.valueOf(category)) / limit);
-        return response;
     }
 
     @Override
@@ -100,18 +91,7 @@ public class BookServiceImplementation implements BookService {
         Pageable pageable = PageRequest.of(pageNumber - 1, limit, Sort.by(order));
         List<BookDto> books = new ArrayList<>();
         Page<Book> bookPage = bookRepository.findAll(pageable);
-        // todo refactoring
-        for (Book book : bookPage) {
-            BookDto bookDto = new BookDto();
-            bookDto.setBook(book);
-            //todo  link to the order of books when done
-            //todo implement login when security is done
-            bookDto.setNumberOfOrders(0);
-            bookDto.setNumberOfBooks(0);
-            books.add(bookDto);
-        }
-        response.setBooks(books);
-        response.setCurrentPage(pageNumber);
+        setBookDetails(pageNumber, response, books, bookPage);
         response.setNumberOfBooks(bookRepository.count());
         response.setNoOfTotalPages(bookRepository.count() / limit);
         return response;
@@ -143,7 +123,7 @@ public class BookServiceImplementation implements BookService {
         }
         book.setModifiedDate(LocalDateTime.now().toString());
         bookRepository.save(book);
-        return "Update successful";
+        return "Updated successfully";
     }
 
     @Override
@@ -154,5 +134,17 @@ public class BookServiceImplementation implements BookService {
         return "Deleted Successfully";
     }
 
+    @Override
+    public String deleteBookById(long id) throws BookStoreException {
+        bookRepository.delete(bookRepository.findById(id)
+                .orElseThrow(() -> new BookStoreException(
+                        String.format("Book with id %d doest not exist", id))));
+        return "Deleted Successfully";
+    }
+
+    public String deleteAll(){
+        bookRepository.deleteAll();
+        return "Deleted Successfully";
+    }
 
 }

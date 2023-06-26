@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class PaginatedBookResponse {
-    private List<BookDto> books;
+    private List<BookDto> bookDtos;
 
     private long currentPage;
 

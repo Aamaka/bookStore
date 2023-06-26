@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Entity
 @Setter
@@ -18,7 +18,7 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    private BigInteger price;
+    private BigDecimal price;
     private String author;
     private int quantityOfBooksAvailable;
     private String isbn;

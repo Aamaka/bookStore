@@ -1,4 +1,4 @@
-package chiamaka.ezeirunne.bookstore.data.models;
+package chiamaka.ezeirunne.bookstore.data.models.users;
 
 import chiamaka.ezeirunne.bookstore.enums.Gender;
 import lombok.AllArgsConstructor;

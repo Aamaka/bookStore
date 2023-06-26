@@ -21,7 +21,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     long countAllBooksByCategory(Category category);
 
-    boolean existsByAuthorIsIgnoreCase(String author);
-
-    boolean existsByCategory(Category category);
 }

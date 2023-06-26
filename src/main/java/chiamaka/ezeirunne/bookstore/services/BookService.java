@@ -2,6 +2,7 @@ package chiamaka.ezeirunne.bookstore.services;
 
 import chiamaka.ezeirunne.bookstore.data.models.Book;
 import chiamaka.ezeirunne.bookstore.dto.requests.BookRegistrationDto;
+import chiamaka.ezeirunne.bookstore.dto.requests.ReviewAndRatingDto;
 import chiamaka.ezeirunne.bookstore.dto.requests.UpdateBookDto;
 import chiamaka.ezeirunne.bookstore.dto.responses.PaginatedBookResponse;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
@@ -17,5 +18,9 @@ public interface BookService {
     PaginatedBookResponse findAllBooks(int pageNumber, int limit);
     String updateBook (UpdateBookDto dto) throws BookStoreException;
     String deleteBookByTitle (String title) throws BookStoreException;
+    String deleteBookById (long id) throws BookStoreException;
+    String deleteAll();
+
+
 
 }

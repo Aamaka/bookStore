@@ -3,13 +3,13 @@ package chiamaka.ezeirunne.bookstore.dto.requests;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 public class BookRegistrationDto {
     private String title;
-    private BigInteger price;
+    private BigDecimal price;
     private String author;
     private String isbn;
     private int quantityOfBooksAvailable;

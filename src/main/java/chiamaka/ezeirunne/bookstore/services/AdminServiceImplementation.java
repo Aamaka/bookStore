@@ -1,6 +1,6 @@
 package chiamaka.ezeirunne.bookstore.services;
 
-import chiamaka.ezeirunne.bookstore.data.models.Admin;
+import chiamaka.ezeirunne.bookstore.data.models.users.Admin;
 import chiamaka.ezeirunne.bookstore.data.repositories.AdminRepository;
 import chiamaka.ezeirunne.bookstore.dto.requests.AdminRegistrationDto;
 import chiamaka.ezeirunne.bookstore.enums.Role;

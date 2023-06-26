@@ -51,10 +51,25 @@ public class BookController {
 
     }
 
-
     @PatchMapping("/update")
     public ResponseEntity<String> updateBook(@RequestBody UpdateBookDto dto) throws BookStoreException {
         return new ResponseEntity<>(bookService.updateBook(dto), HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/delete")
+    public  ResponseEntity<String> deleteBook (@RequestParam(required = false) String title,
+                                               @RequestParam(required = false) long id) throws BookStoreException {
+        String response;
+        if(title != null) {
+            response =  bookService.deleteBookByTitle(title);
+        } else if (id == 0) {
+            response = bookService.deleteBookById(id);
+        } else  {
+            response = bookService.deleteAll();
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
 }

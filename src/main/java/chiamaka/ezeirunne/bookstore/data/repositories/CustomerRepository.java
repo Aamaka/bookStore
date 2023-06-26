@@ -1,6 +1,6 @@
 package chiamaka.ezeirunne.bookstore.data.repositories;
 
-import chiamaka.ezeirunne.bookstore.data.models.Customer;
+import chiamaka.ezeirunne.bookstore.data.models.users.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {

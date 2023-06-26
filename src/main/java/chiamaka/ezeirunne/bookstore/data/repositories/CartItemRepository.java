@@ -7,10 +7,12 @@ import java.util.List;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-    List<CartItem> findAllByCartId(long id);
+    List<CartItem> findAllByCartId(long cartId);
+
+    CartItem findByBookId(Long bookId);
 
 
-    boolean existsByBookId(Long id);
+    boolean existsByBookIdAndCartId(Long bookId, Long cartId);
 
-    CartItem findByBookId(Long id);
+    CartItem findByBookIdAndCartId(Long bo, Long cartId);
 }

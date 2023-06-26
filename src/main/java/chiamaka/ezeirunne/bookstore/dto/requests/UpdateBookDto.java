@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class UpdateBookDto {
-    private long id;
+    private long bookId;
     private String title;
     private BigDecimal price;
     private String author;

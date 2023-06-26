@@ -88,16 +88,16 @@ public class BookServiceImplementationMockTest {
     @Test
     public void testUpdateBook_SuccessfulUpdate() throws BookStoreException {
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setId(1L);
+        dto.setBookId(1L);
         dto.setTitle("James Griffin");
         dto.setAuthor("Peter Mark");
 
         Book existingBook = new Book();
-        existingBook.setId(dto.getId());
+        existingBook.setId(dto.getBookId());
         existingBook.setTitle("Book TItle");
         existingBook.setAuthor("Scholz Lode");
 
-        when(bookRepository.findById(dto.getId())).thenReturn(Optional.of(existingBook));
+        when(bookRepository.findById(dto.getBookId())).thenReturn(Optional.of(existingBook));
 
 
         String result = bookService.updateBook(dto);
@@ -115,7 +115,7 @@ public class BookServiceImplementationMockTest {
     @Test
     public void testUpdateBook_BookNotFound()  {
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setId(3L);
+        dto.setBookId(3L);
         dto.setTitle("Sole");
         dto.setCategory("SELF_HELP");
         dto.setDatePublished("21st march 2015 ");
@@ -124,7 +124,7 @@ public class BookServiceImplementationMockTest {
         dto.setAuthor("Scholz Lode");
 
 
-        when(bookRepository.findById(dto.getId())).thenReturn(Optional.empty());
+        when(bookRepository.findById(dto.getBookId())).thenReturn(Optional.empty());
 
         assertThrows(BookStoreException.class, ()-> bookService.updateBook(dto));
     }

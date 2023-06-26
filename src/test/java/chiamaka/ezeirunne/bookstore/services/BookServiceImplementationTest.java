@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,11 +65,11 @@ class BookServiceImplementationTest {
     @Test
     void updateBook() throws BookStoreException {
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setId(4);
-        dto.setPrice(BigDecimal.valueOf(15000));
+        dto.setBookId(1);
+        dto.setPrice(BigDecimal.valueOf(200));
         assertEquals("Updated successfully", bookServiceImplementation.updateBook(dto));
         UpdateBookDto bookDto = new UpdateBookDto();
-        bookDto.setId(14);
+        bookDto.setBookId(14);
         bookDto.setPrice(BigDecimal.valueOf(100));
         assertThrows(BookStoreException.class, ()->bookServiceImplementation.updateBook(bookDto));
     }

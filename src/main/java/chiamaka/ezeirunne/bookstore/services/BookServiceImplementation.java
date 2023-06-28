@@ -1,11 +1,8 @@
 package chiamaka.ezeirunne.bookstore.services;
 
 import chiamaka.ezeirunne.bookstore.data.models.Book;
-import chiamaka.ezeirunne.bookstore.data.models.cart.Cart;
-import chiamaka.ezeirunne.bookstore.data.models.cart.CartItem;
 import chiamaka.ezeirunne.bookstore.data.repositories.BookRepository;
-import chiamaka.ezeirunne.bookstore.data.repositories.CartItemRepository;
-import chiamaka.ezeirunne.bookstore.data.repositories.CartRepository;
+import chiamaka.ezeirunne.bookstore.data.repositories.OrderRepository;
 import chiamaka.ezeirunne.bookstore.dto.requests.BookRegistrationDto;
 import chiamaka.ezeirunne.bookstore.dto.requests.UpdateBookDto;
 import chiamaka.ezeirunne.bookstore.dto.responses.BookDto;
@@ -20,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +27,11 @@ import java.util.List;
 public class BookServiceImplementation implements BookService {
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
-    private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
+    private  final OrderRepository orderRepository;
 
+    Book getBook(Long bookId) throws BookStoreException {
+        return bookRepository.findById(bookId).orElseThrow(() -> new BookStoreException("Book not found"));
+    }
 
     @Override
     public String registerBook(BookRegistrationDto dto) throws BookStoreException {
@@ -70,7 +68,6 @@ public class BookServiceImplementation implements BookService {
         Pageable pageable = PageRequest.of(pageNumber - 1, limit, Sort.by(order));
         List<BookDto> books = new ArrayList<>();
         Page<Book> bookPage = bookRepository.findBooksByCategory(Category.valueOf(category), pageable);
-        // todo refactoring
         setBookDetails(pageNumber, response, books, bookPage);
         response.setNumberOfBooks(bookRepository.countAllBooksByCategory(Category.valueOf(category)));
         response.setNoOfTotalPages(bookRepository.countAllBooksByCategory(Category.valueOf(category)) / limit);
@@ -81,9 +78,8 @@ public class BookServiceImplementation implements BookService {
         for (Book book : bookPage) {
             BookDto bookDto = new BookDto();
             bookDto.setBook(book);
-            //todo  link to the order of books when done
             //todo implement login when security is done
-            bookDto.setNumberOfOrders(0);
+            bookDto.setNumberOfOrders(orderRepository.countByOrderItemsBook(book));
             bookDto.setNumberOfBooks(book.getQuantityOfBooksAvailable());
             books.add(bookDto);
         }
@@ -105,8 +101,8 @@ public class BookServiceImplementation implements BookService {
     }
 
     @Override
-    public String updateBook(UpdateBookDto dto) throws BookStoreException {
-        Book book = bookRepository.findById(dto.getBookId()).orElseThrow(() -> new BookStoreException("Book does not exist"));
+    public String updateBook(Long bookId , UpdateBookDto dto) throws BookStoreException {
+        Book book = getBook(bookId);
         if(dto.getTitle() != null) {
             book.setTitle(dto.getTitle());
         }
@@ -120,19 +116,7 @@ public class BookServiceImplementation implements BookService {
             book.setDatePublished(dto.getDatePublished());
         }
         if(dto.getPrice() != null) {
-//            BigDecimal totalBookCost = BigDecimal.ZERO;
             book.setPrice(dto.getPrice());
-//            CartItem cartItem = cartItemRepository.findByBookId(dto.getBookId());
-//            cartItem.setUnitCost(dto.getPrice());
-//            cartItem.setSubTotal(dto.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-//            totalBookCost = totalBookCost.add(book.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-//            cartItem.setModifiedDate(LocalDateTime.now().toString());
-//            cartItemRepository.save(cartItem);
-//            Cart cart = cartRepository.findById(cartItem.getCartId()).get();
-//            cart.setTotalCost(totalBookCost);
-//            cart.setTotalBookCost(totalBookCost);
-//            cart.setModifiedDate(LocalDateTime.now().toString());
-//            cartRepository.save(cart);
         }
         if(dto.getQuantityOfBooksAvailable() != 0) {
             book.setQuantityOfBooksAvailable(dto.getQuantityOfBooksAvailable());

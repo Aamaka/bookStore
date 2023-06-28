@@ -1,16 +1,14 @@
 package chiamaka.ezeirunne.bookstore.data.models.cart;
 
-import chiamaka.ezeirunne.bookstore.data.models.Book;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 public class CartItem {
     @Id

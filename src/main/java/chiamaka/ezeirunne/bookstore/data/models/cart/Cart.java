@@ -22,7 +22,6 @@ public class Cart {
     private int numberOfItem;
 
     private BigDecimal totalBookCost;
-    private BigDecimal totalDeliveryCost;
     private BigDecimal totalCost;
 
     private String createdDate;

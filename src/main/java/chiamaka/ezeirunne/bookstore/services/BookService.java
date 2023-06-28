@@ -16,7 +16,7 @@ public interface BookService {
     PaginatedBookResponse findBooksByAuthor(int pageNumber, int limit, String author) throws BookStoreException;
     PaginatedBookResponse findBooksByCategory(int pageNumber, int limit, String category) throws BookStoreException;
     PaginatedBookResponse findAllBooks(int pageNumber, int limit);
-    String updateBook (UpdateBookDto dto) throws BookStoreException;
+    String updateBook (Long bookId, UpdateBookDto dto) throws BookStoreException;
     String deleteBookByTitle (String title) throws BookStoreException;
     String deleteBookById (long id) throws BookStoreException;
     String deleteAll();

@@ -5,7 +5,7 @@ import chiamaka.ezeirunne.bookstore.dto.responses.CartResponse;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
 
 public interface CartService {
-    void addBookToCart (CartDto dto) throws BookStoreException;
-    CartResponse viewCart(long customerID) throws BookStoreException;
-//    String checkOut();
+    String addBookToCart (CartDto dto) throws BookStoreException;
+    CartResponse viewCart(Long customerID) throws BookStoreException;
+    String checkOut(Long customerId) throws BookStoreException;
 }

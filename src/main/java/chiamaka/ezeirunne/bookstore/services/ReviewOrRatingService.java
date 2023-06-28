@@ -3,7 +3,7 @@ package chiamaka.ezeirunne.bookstore.services;
 import chiamaka.ezeirunne.bookstore.dto.requests.ReviewAndRatingDto;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
 
-public interface ReviewService {
+public interface ReviewOrRatingService {
 
-    String makeAReview(ReviewAndRatingDto dto) throws BookStoreException;
+    String makeAReviewOrRating(ReviewAndRatingDto dto) throws BookStoreException;
 }

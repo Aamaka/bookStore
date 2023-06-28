@@ -14,11 +14,16 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/")
-    public void addBookToCart (@RequestBody CartDto dto) throws BookStoreException{
-        cartService.addBookToCart(dto);
+    public String addBookToCart (@RequestBody CartDto dto) throws BookStoreException{
+        return cartService.addBookToCart(dto);
     }
     @GetMapping("/{customerId}")
-    public CartResponse viewCart(@PathVariable long customerId) throws BookStoreException{
+    public CartResponse viewCart(@PathVariable Long customerId) throws BookStoreException{
         return cartService.viewCart(customerId);
+    }
+
+    @PostMapping("/check_out")
+    public String checkOut(@RequestParam Long customerId) throws BookStoreException{
+        return cartService.checkOut(customerId);
     }
 }

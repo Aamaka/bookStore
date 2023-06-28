@@ -1,13 +1,12 @@
 package chiamaka.ezeirunne.bookstore.services;
 
 import chiamaka.ezeirunne.bookstore.data.models.Book;
+import chiamaka.ezeirunne.bookstore.data.models.Order;
+import chiamaka.ezeirunne.bookstore.data.models.OrderItem;
 import chiamaka.ezeirunne.bookstore.data.models.cart.Cart;
 import chiamaka.ezeirunne.bookstore.data.models.cart.CartItem;
 import chiamaka.ezeirunne.bookstore.data.models.users.Customer;
-import chiamaka.ezeirunne.bookstore.data.repositories.BookRepository;
-import chiamaka.ezeirunne.bookstore.data.repositories.CartItemRepository;
-import chiamaka.ezeirunne.bookstore.data.repositories.CartRepository;
-import chiamaka.ezeirunne.bookstore.data.repositories.CustomerRepository;
+import chiamaka.ezeirunne.bookstore.data.repositories.*;
 import chiamaka.ezeirunne.bookstore.dto.requests.CartDto;
 import chiamaka.ezeirunne.bookstore.dto.responses.CartResponse;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,15 +28,16 @@ public class CartServiceImplementation implements CartService {
     private final BookRepository bookRepository;
 
     private final CartItemRepository cartItemRepository;
+    private final OrderRepository orderRepository;
     private Customer getCustomerById(Long customerId) throws BookStoreException {
         return customerRepository.findById(customerId).orElseThrow(()-> new BookStoreException("Customer does not exist"));
     }
 
-    private Book getBook(long bookId) throws BookStoreException {
+    Book getBook(Long bookId) throws BookStoreException {
         return bookRepository.findById(bookId).orElseThrow(() -> new BookStoreException("Book not found"));
     }
 
-    private Cart getCustomerCart(Long customerId) throws BookStoreException {
+    public Cart getCustomerCart(Long customerId) throws BookStoreException {
         Customer customer = getCustomerById(customerId);
         Cart cart;
 
@@ -48,7 +49,6 @@ public class CartServiceImplementation implements CartService {
                     .customerId(customer.getId())
                     .totalCost(BigDecimal.ZERO)
                     .totalBookCost(BigDecimal.ZERO)
-                    .totalDeliveryCost(BigDecimal.ZERO)
                     .createdDate(LocalDateTime.now().toString())
                     .build();
             cartRepository.save(cart);
@@ -57,7 +57,7 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public void addBookToCart(CartDto dto) throws BookStoreException {
+    public String addBookToCart(CartDto dto) throws BookStoreException {
         Cart cart = getCustomerCart(dto.getCustomerId());
         CartItem cartItem;
 
@@ -92,18 +92,49 @@ public class CartServiceImplementation implements CartService {
         cart.setTotalBookCost(totalBookCost);
         cart.setModifiedDate(LocalDateTime.now().toString());
         cartRepository.save(cart);
-
+        return "Success";
     }
 
     @Override
-    public CartResponse viewCart(long customerId) throws BookStoreException {
+    public CartResponse viewCart(Long customerId) throws BookStoreException {
         CartResponse response = new CartResponse();
         Cart cart = getCustomerCart(customerId);
         List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
         response.setCart(cart);
         response.setCartItems(cartItems);
         response.setNoOfItems(cart.getNumberOfItem());
+        response.setTotalCost(cart.getTotalCost());
+        response.setTotalNoOfCartItems(cartItems.size());
+        response.setTotalBookCost(cart.getTotalBookCost());
         return response;
 
+    }
+
+    @Override
+    public String checkOut(Long customerId) throws BookStoreException {
+        Cart cart = getCustomerCart(customerId);
+        if(cart.getNumberOfItem() == 0) throw new BookStoreException("Cart is empty");
+        Order order = new Order();
+        List<OrderItem> orderItems = new ArrayList<>();
+        List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
+
+        for (CartItem cartItem: cartItems) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setBook(getBook(cartItem.getBookId()));
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItems.add(orderItem);
+
+        }
+        order.setOrderItems(orderItems);
+        order.setCreatedDate(LocalDateTime.now().toString());
+        order.setTotalCost(cart.getTotalCost());
+        order.setNumberOfItem(cart.getNumberOfItem());
+        order.setTotalBookCost(cart.getTotalBookCost());
+        orderRepository.save(order);
+        cartItemRepository.deleteAll(cartItems);
+        cartRepository.delete(cart);
+
+        return "Checked out successfully";
     }
 }

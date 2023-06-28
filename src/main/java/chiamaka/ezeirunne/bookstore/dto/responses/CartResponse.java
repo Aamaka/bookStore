@@ -14,5 +14,5 @@ public class CartResponse {
     private long noOfItems;
     private long totalNoOfCartItems;
     private BigDecimal totalCost;
-    private BigDecimal totalProductCost;
+    private BigDecimal totalBookCost;
 }

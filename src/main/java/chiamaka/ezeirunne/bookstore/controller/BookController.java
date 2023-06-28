@@ -2,10 +2,12 @@ package chiamaka.ezeirunne.bookstore.controller;
 
 import chiamaka.ezeirunne.bookstore.data.models.Book;
 import chiamaka.ezeirunne.bookstore.dto.requests.BookRegistrationDto;
+import chiamaka.ezeirunne.bookstore.dto.requests.ReviewAndRatingDto;
 import chiamaka.ezeirunne.bookstore.dto.requests.UpdateBookDto;
 import chiamaka.ezeirunne.bookstore.dto.responses.PaginatedBookResponse;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
 import chiamaka.ezeirunne.bookstore.services.BookService;
+import chiamaka.ezeirunne.bookstore.services.ReviewOrRatingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import java.io.IOException;
 public class BookController {
     @Autowired
     private  BookService bookService;
+    @Autowired
+    private ReviewOrRatingService reviewOrRatingService;
 
     @PostMapping("/")
     public ResponseEntity<String> bookRegistration(@RequestBody BookRegistrationDto dto) throws IOException, BookStoreException {
@@ -51,9 +55,9 @@ public class BookController {
 
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<String> updateBook(@RequestBody UpdateBookDto dto) throws BookStoreException {
-        return new ResponseEntity<>(bookService.updateBook(dto), HttpStatus.OK);
+    @PatchMapping("/update/{bookId}")
+    public ResponseEntity<String> updateBook(@PathVariable Long bookId, @RequestBody UpdateBookDto dto) throws BookStoreException {
+        return new ResponseEntity<>(bookService.updateBook(bookId, dto), HttpStatus.OK);
     }
 
 
@@ -70,6 +74,11 @@ public class BookController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
 
+    }
+
+    @PostMapping("/review_or_rating")
+    public String makeAReviewOrRating(@RequestBody ReviewAndRatingDto dto) throws BookStoreException{
+        return reviewOrRatingService.makeAReviewOrRating(dto);
     }
 
 }

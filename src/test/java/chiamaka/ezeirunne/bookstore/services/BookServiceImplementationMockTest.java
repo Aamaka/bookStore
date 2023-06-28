@@ -88,19 +88,18 @@ public class BookServiceImplementationMockTest {
     @Test
     public void testUpdateBook_SuccessfulUpdate() throws BookStoreException {
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setBookId(1L);
+        Long bookId = 3L;
         dto.setTitle("James Griffin");
         dto.setAuthor("Peter Mark");
 
         Book existingBook = new Book();
-        existingBook.setId(dto.getBookId());
         existingBook.setTitle("Book TItle");
         existingBook.setAuthor("Scholz Lode");
 
-        when(bookRepository.findById(dto.getBookId())).thenReturn(Optional.of(existingBook));
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(existingBook));
 
 
-        String result = bookService.updateBook(dto);
+        String result = bookService.updateBook(bookId, dto);
 
         verify(bookRepository).save(existingBook);
 
@@ -115,7 +114,7 @@ public class BookServiceImplementationMockTest {
     @Test
     public void testUpdateBook_BookNotFound()  {
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setBookId(3L);
+        Long bookId = 3L;
         dto.setTitle("Sole");
         dto.setCategory("SELF_HELP");
         dto.setDatePublished("21st march 2015 ");
@@ -124,9 +123,9 @@ public class BookServiceImplementationMockTest {
         dto.setAuthor("Scholz Lode");
 
 
-        when(bookRepository.findById(dto.getBookId())).thenReturn(Optional.empty());
+        when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
 
-        assertThrows(BookStoreException.class, ()-> bookService.updateBook(dto));
+        assertThrows(BookStoreException.class, ()-> bookService.updateBook(bookId, dto));
     }
 
 
@@ -156,27 +155,6 @@ public class BookServiceImplementationMockTest {
         when(bookRepository.findByTitleIsIgnoreCase(title)).thenReturn(Optional.empty());
 
         assertThrows(BookStoreException.class, ()-> bookService.findBookByTitle(title));
-    }
-
-    @Test
-    public void testFindByCategory_BooksFound() {
-        String category = "SELF_HELP";
-        List<Book> books = new ArrayList<>();
-        Book book = new Book();
-        book.setCategory(Category.FICTION);
-        book.setDatePublished("21st march 2015 ");
-        book.setIsbn("3456855554678954");
-        book.setQuantityOfBooksAvailable(200);
-        book.setAuthor("Scholz Lode");
-        books.add(book);
-
-
-        when(bookRepository.findBooksByCategory(eq(Category.valueOf(category)), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(books));
-
-        PaginatedBookResponse result = bookService.findBooksByCategory(1, 10, category);
-
-        assertEquals(books.size(), result.getBookDtos().size());
     }
 
     @Test

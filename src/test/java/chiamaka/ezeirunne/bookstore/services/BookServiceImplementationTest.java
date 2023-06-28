@@ -64,14 +64,14 @@ class BookServiceImplementationTest {
 
     @Test
     void updateBook() throws BookStoreException {
+        Long bookId = 3L;
         UpdateBookDto dto = new UpdateBookDto();
-        dto.setBookId(1);
-        dto.setPrice(BigDecimal.valueOf(200));
-        assertEquals("Updated successfully", bookServiceImplementation.updateBook(dto));
+        dto.setPrice(BigDecimal.valueOf(300));
+        assertEquals("Updated successfully", bookServiceImplementation.updateBook(bookId, dto));
         UpdateBookDto bookDto = new UpdateBookDto();
-        bookDto.setBookId(14);
+        Long book_id = 34L;
         bookDto.setPrice(BigDecimal.valueOf(100));
-        assertThrows(BookStoreException.class, ()->bookServiceImplementation.updateBook(bookDto));
+        assertThrows(BookStoreException.class, ()->bookServiceImplementation.updateBook(book_id, bookDto));
     }
 
     @Test

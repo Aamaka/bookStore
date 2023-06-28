@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
-public class ReviewServiceImplementation implements ReviewService {
+public class ReviewOrRatingServiceImplementation implements ReviewOrRatingService {
     private final BookRepository bookRepository;
     private final CustomerRepository customerRepository;
     private final ReviewRepository reviewRepository;
@@ -28,7 +28,7 @@ public class ReviewServiceImplementation implements ReviewService {
         return customerRepository.findById(customerId).orElseThrow(()-> new BookStoreException("Customer does not exist"));
     }
     @Override
-    public String makeAReview(ReviewAndRatingDto dto) throws BookStoreException {
+    public String makeAReviewOrRating(ReviewAndRatingDto dto) throws BookStoreException {
         Customer customer = getCustomerById(dto.getCustomerId());
         Book book = getBook(dto.getBookId());
         ReviewAndRating reviewAndRating = new ReviewAndRating();

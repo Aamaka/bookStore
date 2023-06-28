@@ -15,7 +15,7 @@ git clone https://github.com/Aamaka/bookStore
 ## Development Environment Setup
 To set up the development environment for this application, follow these steps:
 
-1. Install Java Development Kit (JDK) version 11 or higher.
+1. Install Java Development Kit (JDK) version 17.
 
 2. Install an Integrated Development Environment (IDE) such as IntelliJ IDEA or Eclipse.
 

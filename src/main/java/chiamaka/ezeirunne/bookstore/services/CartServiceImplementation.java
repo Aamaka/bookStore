@@ -57,8 +57,9 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public String addBookToCart(CartDto dto) throws BookStoreException {
-        Cart cart = getCustomerCart(dto.getCustomerId());
+    public String addBookToCart(Long customerId, CartDto dto) throws BookStoreException {
+        System.out.println("i===> I GOT HERE");
+        Cart cart = getCustomerCart(customerId);
         CartItem cartItem;
 
         BigDecimal totalBookCost = BigDecimal.ZERO;

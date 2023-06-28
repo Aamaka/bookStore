@@ -77,7 +77,7 @@ class CartServiceImplementationTest {
         when(cartItemRepository.findByBookIdAndCartId(eq(bookId), eq(cart.getId()))).thenReturn(existingCartItem);
 
 
-        String result = cartService.addBookToCart(new CartDto(customerId, bookId, quantity));
+        String result = cartService.addBookToCart(bookId, new CartDto(customerId, quantity));
 
 
         verify(cartItemRepository, times(1)).findByBookIdAndCartId(eq(bookId), eq(cart.getId()));
@@ -111,7 +111,7 @@ class CartServiceImplementationTest {
         when(cartRepository.findByCustomerId(eq(customerId))).thenReturn(Optional.of(cart));
         when(cartItemRepository.existsByBookIdAndCartId(eq(bookId), eq(cart.getId()))).thenReturn(false);
 
-        String result = cartService.addBookToCart(new CartDto(customerId, bookId, quantity));
+        String result = cartService.addBookToCart(bookId, new CartDto(customerId, quantity));
 
 
         verify(cartItemRepository, never()).findByBookIdAndCartId(anyLong(), anyLong());

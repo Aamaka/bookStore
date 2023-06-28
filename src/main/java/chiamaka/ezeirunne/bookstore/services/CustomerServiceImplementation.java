@@ -4,7 +4,7 @@ import chiamaka.ezeirunne.bookstore.data.models.users.Customer;
 import chiamaka.ezeirunne.bookstore.data.repositories.CustomerRepository;
 import chiamaka.ezeirunne.bookstore.dto.requests.CustomerRegistrationDto;
 import chiamaka.ezeirunne.bookstore.enums.Gender;
-import chiamaka.ezeirunne.bookstore.enums.Role;
+import chiamaka.ezeirunne.bookstore.enums.Authority;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class CustomerServiceImplementation implements CustomerService {
         Customer customer = modelMapper.map(dto, Customer.class);
         customer.setPassword(passwordEncoder.encode(dto.getPassword()));
         customer.setGender(Gender.valueOf(dto.getGender()));
-        customer.setRole(Role.CUSTOMER);
+        customer.getAuthority().add((Authority.CUSTOMER));
         customer.setCreatedDate(LocalDateTime.now().toString());
         customerRepository.save(customer);
         return "Registration successful";

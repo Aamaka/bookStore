@@ -14,8 +14,8 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/")
-    public String addBookToCart (@RequestBody CartDto dto) throws BookStoreException{
-        return cartService.addBookToCart(dto);
+    public String addBookToCart (@RequestParam Long customerId, @RequestBody CartDto dto) throws BookStoreException{
+        return cartService.addBookToCart(customerId, dto);
     }
     @GetMapping("/{customerId}")
     public CartResponse viewCart(@PathVariable Long customerId) throws BookStoreException{

@@ -34,11 +34,13 @@ To run the application locally, follow these steps:
 3. Configure the database connection details in the application's configuration file (application.properties).
 
 ````properties
-spring.datasource.url=jdbc:mysql://localhost:3306/bookStore
+spring.datasource.url=jdbc:mysql://localhost:3306/bookstore
 spring.datasource.username=root
 spring.datasource.password=your_password
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.banner.image.location=banner.txt
+pay_stack_initialize_url=https://api.paystack.co/transaction/initialize
+pay_stack_verification_url=https://api.paystack.co/transaction/verify/
 secretKey=your_paystack_secretKey
 spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update

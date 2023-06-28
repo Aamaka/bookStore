@@ -1,5 +1,5 @@
 package chiamaka.ezeirunne.bookstore.enums;
 
-public enum Role {
+public enum Authority {
     ADMIN, CUSTOMER
 }

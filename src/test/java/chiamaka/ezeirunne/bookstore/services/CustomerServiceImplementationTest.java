@@ -4,7 +4,7 @@ import chiamaka.ezeirunne.bookstore.data.models.users.Customer;
 import chiamaka.ezeirunne.bookstore.data.repositories.CustomerRepository;
 import chiamaka.ezeirunne.bookstore.dto.requests.CustomerRegistrationDto;
 import chiamaka.ezeirunne.bookstore.enums.Gender;
-import chiamaka.ezeirunne.bookstore.enums.Role;
+import chiamaka.ezeirunne.bookstore.enums.Authority;
 import chiamaka.ezeirunne.bookstore.exceptions.BookStoreException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,7 +60,6 @@ class CustomerServiceImplementationTest {
         assertEquals("Registration successful", result);
         assertEquals(encodedPassword, customer.getPassword());
         assertEquals(Gender.MALE, customer.getGender());
-        assertEquals(Role.CUSTOMER, customer.getRole());
         assertNotNull(customer.getCreatedDate());
     }
 

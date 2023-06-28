@@ -1,8 +1,8 @@
 package chiamaka.ezeirunne.bookstore.services;
 
 import chiamaka.ezeirunne.bookstore.data.models.Book;
-import chiamaka.ezeirunne.bookstore.data.models.Order;
-import chiamaka.ezeirunne.bookstore.data.models.OrderItem;
+import chiamaka.ezeirunne.bookstore.data.models.order.Order;
+import chiamaka.ezeirunne.bookstore.data.models.order.OrderItem;
 import chiamaka.ezeirunne.bookstore.data.models.cart.Cart;
 import chiamaka.ezeirunne.bookstore.data.models.cart.CartItem;
 import chiamaka.ezeirunne.bookstore.data.models.users.Customer;

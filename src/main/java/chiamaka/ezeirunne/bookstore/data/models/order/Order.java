@@ -1,6 +1,5 @@
-package chiamaka.ezeirunne.bookstore.data.models;
+package chiamaka.ezeirunne.bookstore.data.models.order;
 
-import chiamaka.ezeirunne.bookstore.data.models.cart.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

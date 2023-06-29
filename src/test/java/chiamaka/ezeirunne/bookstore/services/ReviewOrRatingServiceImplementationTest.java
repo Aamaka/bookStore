@@ -35,7 +35,6 @@ public class ReviewOrRatingServiceImplementationTest {
 
     @Test
     public void makeAReviewOrRating_ValidDto_ReturnsSuccessMessage() throws BookStoreException {
-        // Arrange
         ReviewAndRatingDto dto = new ReviewAndRatingDto();
         dto.setCustomerId(1L);
         dto.setBookId(1L);
@@ -49,19 +48,16 @@ public class ReviewOrRatingServiceImplementationTest {
         book.setId(1L);
 
         ReviewAndRating reviewAndRating = new ReviewAndRating();
-        // Set the properties of reviewAndRating
+        reviewAndRating.setRating(5);
 
         Mockito.when(customerRepository.findById(dto.getCustomerId())).thenReturn(Optional.of(customer));
         Mockito.when(bookRepository.findById(dto.getBookId())).thenReturn(Optional.of(book));
         Mockito.when(reviewRepository.existsByCustomer(customer.getId())).thenReturn(false);
         Mockito.when(reviewRepository.save(ArgumentMatchers.any(ReviewAndRating.class))).thenReturn(reviewAndRating);
 
-        // Act
         String result = reviewOrRatingService.makeAReviewOrRating(dto);
 
-        // Assert
         Assertions.assertEquals("Dropped successfully", result);
-        // Assert any additional assertions for the behavior of the service
     }
 
     @Test
@@ -100,7 +96,6 @@ public class ReviewOrRatingServiceImplementationTest {
 
     @Test
     public void makeAReviewOrRating_InvalidBookId_ThrowsBookStoreException() {
-        // Arrange
         ReviewAndRatingDto dto = new ReviewAndRatingDto();
         dto.setCustomerId(1L);
         dto.setBookId(1L);
